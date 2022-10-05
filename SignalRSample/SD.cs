@@ -12,7 +12,7 @@
             };
         }
 
-        public const string Wand = "wand ";
+        public const string Wand = "wand";
         public const string Stone = "stone";
         public const string Cloak = "cloak";
 
