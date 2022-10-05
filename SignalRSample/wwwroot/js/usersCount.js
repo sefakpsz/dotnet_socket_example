@@ -1,5 +1,8 @@
 ﻿//create connection
-var connectionUserCount = new signalR.HubConnectionBuilder().withUrl("/hubs/userCount").build();
+//configure to TransportType with help of adding comma next to url and => ",signalR.HttpTransportType.LongPolling/ServerSentEvents/WebSockets(Default)"
+var connectionUserCount = new signalR.HubConnectionBuilder()
+    //.configureLogging(signalR.LogLevel.Information)       if we want to logging we can use this line of code
+    .withUrl("/hubs/userCount",signalR.HttpTransportType.WebSockets).build();
 
 //connect to methods that hub invokes aka receive notifications from hub
 connectionUserCount.on("updateTotalViews", (value) => {
@@ -14,7 +17,9 @@ connectionUserCount.on("updateTotalUsers", (value) => {
 
 //invoke hub methods aka send notification to hub
 function newWindowLoadedOnClient() {
-    connectionUserCount.send("NewWindowLoaded");
+    //if we use send we don't expect any response but when we use invoke we do
+    //connectionUserCount.Send("NewWindowLoaded");
+    connectionUserCount.invoke("NewWindowLoaded","Sefa").then((value) => console.log(value));
 }
 
 //start connection
