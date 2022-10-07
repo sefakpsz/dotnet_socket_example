@@ -26,9 +26,8 @@ namespace SignalRSample.Controllers
         public async Task<IActionResult> DeathlyHallows(string type)
         {
             if (SD.DeathlyHallowRace.ContainsKey(type))
-            {
                 SD.DeathlyHallowRace[type]++;
-            }
+
             await _deathlyHub.Clients.All.SendAsync("updateDeathlyHallowCount",
                 SD.DeathlyHallowRace[SD.Cloak],
                 SD.DeathlyHallowRace[SD.Stone],
