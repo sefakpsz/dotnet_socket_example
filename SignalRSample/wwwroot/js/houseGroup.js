@@ -19,6 +19,7 @@ let trigger_ravenclaw = document.getElementById("trigger_ravenclaw");
 var connectionHouse = new signalR.HubConnectionBuilder()
     .withUrl("/hubs/houseGroup").build();
 
+//subscribe buttons
 btn_gryffindor.addEventListener("click", function (event) {
     connectionHouse.send("JoinHouse", "Gryffindor");
     event.preventDefault();
@@ -39,7 +40,7 @@ btn_ravenclaw.addEventListener("click", function (event) {
     event.preventDefault();
 });
 
-
+//unsubscribe buttons
 btn_un_gryffindor.addEventListener("click", function (event) {
     connectionHouse.send("LeaveHouse", "Gryffindor");
     event.preventDefault();
@@ -60,7 +61,7 @@ btn_un_ravenclaw.addEventListener("click", function (event) {
     event.preventDefault();
 });
 
-
+//trigger buttons
 trigger_gryffindor.addEventListener("click", function (event) {
     connectionHouse.send("TriggerHouseNotify", "Gryffindor");
     event.preventDefault();
@@ -83,7 +84,7 @@ trigger_ravenclaw.addEventListener("click", function (event) {
 
 
 connectionHouse.on("triggerHouseNotification", (houseName) => {
-    toastr.success('A new notification for ' + houseName + ' has been launched.');
+    toastr.success(`A new notification for ${houseName} has been launched.`);
 });
 
 
@@ -123,7 +124,7 @@ connectionHouse.on("subscriptionStatus", (strGroupsJoined, houseName, hasSubscri
                 break;
         }
 
-        toastr.success('You have Subscribed Successfully. ' + houseName);
+        toastr.success(`You have Subscribed Successfully. ${houseName}`);
     }
     else {
         //unsubscribe
@@ -148,7 +149,7 @@ connectionHouse.on("subscriptionStatus", (strGroupsJoined, houseName, hasSubscri
                 break;
         }
 
-        toastr.success('You have Unsubscribed Successfully. ' + houseName);
+        toastr.success(`You have Unsubscribed Successfully. ${houseName}`);
     }
 });
 

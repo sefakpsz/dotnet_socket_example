@@ -22,6 +22,7 @@ namespace SignalRSample.Hubs
                     }
                 }
 
+                //joining group of {houseName}
                 await Groups.AddToGroupAsync(Context.ConnectionId, houseName);
 
                 await Clients.Caller.SendAsync("subscriptionStatus", houseList, houseName, true);
@@ -46,6 +47,7 @@ namespace SignalRSample.Hubs
                     }
                 }
 
+                //leaving group of {houseName}
                 await Groups.RemoveFromGroupAsync(Context.ConnectionId, houseName);
 
                 await Clients.Caller.SendAsync("subscriptionStatus", houseList, houseName, false);
