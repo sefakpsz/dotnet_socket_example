@@ -22,9 +22,11 @@ namespace SignalRSample.Hubs
                     }
                 }
 
+                await Groups.AddToGroupAsync(Context.ConnectionId, houseName);
+
                 await Clients.Caller.SendAsync("subscriptionStatus", houseList, houseName, true);
 
-                await Groups.AddToGroupAsync(Context.ConnectionId, houseName);
+                await Clients.Others.SendAsync("newMemberAddedToHouse", houseName);
             }
         }
 
@@ -44,10 +46,17 @@ namespace SignalRSample.Hubs
                     }
                 }
 
+                await Groups.RemoveFromGroupAsync(Context.ConnectionId, houseName);
+
                 await Clients.Caller.SendAsync("subscriptionStatus", houseList, houseName, false);
 
-                await Groups.RemoveFromGroupAsync(Context.ConnectionId, houseName);
+                await Clients.Others.SendAsync("newMemberRemovedFromHouse", houseName);
             }
+        }
+
+        public async Task TriggerHouseNotify(string houseName)
+        {
+            await Clients.Group(houseName).SendAsync("triggerHouseNotification", houseName);
         }
     }
 }

@@ -15,7 +15,6 @@ let trigger_slytherin = document.getElementById("trigger_slytherin");
 let trigger_hufflepuff = document.getElementById("trigger_hufflepuff");
 let trigger_ravenclaw = document.getElementById("trigger_ravenclaw");
 
-
 //create connection
 var connectionHouse = new signalR.HubConnectionBuilder()
     .withUrl("/hubs/houseGroup").build();
@@ -62,6 +61,41 @@ btn_un_ravenclaw.addEventListener("click", function (event) {
 });
 
 
+trigger_gryffindor.addEventListener("click", function (event) {
+    connectionHouse.send("TriggerHouseNotify", "Gryffindor");
+    event.preventDefault();
+});
+
+trigger_slytherin.addEventListener("click", function (event) {
+    connectionHouse.send("TriggerHouseNotify", "Slytherin");
+    event.preventDefault();
+});
+
+trigger_hufflepuff.addEventListener("click", function (event) {
+    connectionHouse.send("TriggerHouseNotify", "Hufflepuff");
+    event.preventDefault();
+});
+
+trigger_ravenclaw.addEventListener("click", function (event) {
+    connectionHouse.send("TriggerHouseNotify", "Ravenclaw");
+    event.preventDefault();
+});
+
+
+connectionHouse.on("triggerHouseNotification", (houseName) => {
+    toastr.success('A new notification for ' + houseName + ' has been launched.');
+});
+
+
+connectionHouse.on("newMemberAddedToHouse", (houseName) => {
+    toastr.success('Member has subscribed to ' + houseName);
+});
+
+connectionHouse.on("newMemberRemovedFromHouse", (houseName) => {
+    toastr.warning('Member has unsubscribed from ' + houseName);
+});
+
+
 connectionHouse.on("subscriptionStatus", (strGroupsJoined, houseName, hasSubscribed) => {
     lbl_houseJoined.innerText = strGroupsJoined;
 
@@ -69,19 +103,19 @@ connectionHouse.on("subscriptionStatus", (strGroupsJoined, houseName, hasSubscri
         //subscribe to
 
         switch (houseName) {
-            case 'gryffindor':
+            case 'Gryffindor':
                 btn_gryffindor.style.display = "none";
                 btn_un_gryffindor.style.display = "";
                 break;
-            case 'slytherin':
+            case 'Slytherin':
                 btn_slytherin.style.display = "none";
                 btn_un_slytherin.style.display = "";
                 break;
-            case 'hufflepuff':
+            case 'Hufflepuff':
                 btn_hufflepuff.style.display = "none";
                 btn_un_hufflepuff.style.display = "";
                 break;
-            case 'ravenclaw':
+            case 'Ravenclaw':
                 btn_ravenclaw.style.display = "none";
                 btn_un_ravenclaw.style.display = "";
                 break;
@@ -89,24 +123,24 @@ connectionHouse.on("subscriptionStatus", (strGroupsJoined, houseName, hasSubscri
                 break;
         }
 
-        toastr.success('You have Subscribed Successfully. ${houseName}');
+        toastr.success('You have Subscribed Successfully. ' + houseName);
     }
     else {
         //unsubscribe
         switch (houseName) {
-            case 'gryffindor':
+            case 'Gryffindor':
                 btn_gryffindor.style.display = "";
                 btn_un_gryffindor.style.display = "none";
                 break;
-            case 'slytherin':
+            case 'Slytherin':
                 btn_slytherin.style.display = "";
                 btn_un_slytherin.style.display = "none";
                 break;
-            case 'hufflepuff':
+            case 'Hufflepuff':
                 btn_hufflepuff.style.display = "";
                 btn_un_hufflepuff.style.display = "none";
                 break;
-            case 'ravenclaw':
+            case 'Ravenclaw':
                 btn_ravenclaw.style.display = "";
                 btn_un_ravenclaw.style.display = "none";
                 break;
@@ -114,7 +148,7 @@ connectionHouse.on("subscriptionStatus", (strGroupsJoined, houseName, hasSubscri
                 break;
         }
 
-        toastr.success('You have Unsubscribed Successfully. ${houseName}');
+        toastr.success('You have Unsubscribed Successfully. ' + houseName);
     }
 });
 
