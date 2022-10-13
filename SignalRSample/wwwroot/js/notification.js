@@ -10,7 +10,8 @@ connectionNotification.on("LoadNotification", function (message, counter) {
     document.getElementById("messageList").innerHTML = "";
     var notificationCounter = document.getElementById("notificationCounter");
     notificationCounter.innerHTML = "<span>(" + counter + ")</span>";
-    for (let i = message.length - 1; i >= 0; i--) {
+    for (let i = message.length - 1; i >= 0; i--)
+    {
         var li = document.createElement("li");
         li.textContent = `Notification - ${message[i]}`;
         document.getElementById("messageList").appendChild(li);
