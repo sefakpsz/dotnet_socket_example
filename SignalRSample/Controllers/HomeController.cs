@@ -36,6 +36,11 @@ namespace SignalRSample.Controllers
             return Accepted();
         }
 
+        public IActionResult BasicChat()
+        {
+            return View();
+        }
+
         public IActionResult Notification()
         {
             return View();
