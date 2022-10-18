@@ -2,17 +2,29 @@
 {
     public class HubConnections
     {
-        //userid = connectionid 
-        public static Dictionary<string, List<string>> Users { get; set; }
-
+        //userid = connectionid
+        public static Dictionary<string, List<string>> Users = new();
         public static bool HasUserConnection(string UserId, string ConnectionId)
         {
             try
             {
                 if (Users.ContainsKey(UserId))
-                {
                     return Users[UserId].Any(p => p.Contains(ConnectionId));
-                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return false;
+        }
+
+        public static bool HasUser(string UserId)
+        {
+            try
+            {
+                if (Users.ContainsKey(UserId))
+                    return Users[UserId].Any();
             }
             catch (Exception ex)
             {

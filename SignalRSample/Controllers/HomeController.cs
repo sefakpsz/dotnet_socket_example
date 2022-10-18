@@ -59,7 +59,7 @@ namespace SignalRSample.Controllers
             {
                 Rooms = _context.ChatRoom.ToList(),
                 MaxRoomAllowed = 4,
-                UserId = userId,
+                UserId = userId
             };
             return View(chatVm);
         }

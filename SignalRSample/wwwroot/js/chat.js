@@ -1,30 +1,22 @@
-﻿var connectionChat = new signalR.HubConnectionBuilder().withUrl("/hubs/chat").build();
+﻿var connection = new signalR.HubConnectionBuilder()
+    .withUrl("/hubs/chat")
+    .withAutomaticReconnect([0, 1000, 5000])
+    .build();
 
-document.getElementById("sendMessage").disabled = true;
-
-connectionChat.on("MessageReceived", function (user, message) {
-    var li = document.createElement("li");
-    li.textContent = `${user} - ${message}`;
-    document.getElementById("messagesList").appendChild(li);
-});
-
-document.getElementById("sendMessage").addEventListener("click", function (event) {
-    var message = document.getElementById("chatMessage").value;
-    var sender = document.getElementById("senderEmail").value;
-    var receiver = document.getElementById("receiverEmail").value;
-
-    if (receiver.length > 0) {
-        connectionChat.send("SendMessageToReceiver", sender, receiver, message);
+connection.on("ReceiveUserConnected", function (userId, userName, isOldConnection) {
+    if (!isOldConnection) {
+        addMessage(`${userName} has openned a connection`);
     }
-    else {
-        connectionChat.send("SendMessageToAll", sender, message).catch(function (err) {
-            return console.error(err.toString());
-        });
+});
+
+function addMessage(msg) {
+    if (msg == null && msg == '') {
+        return;
     }
+    let ui = document.getElementById('messagesList');
+    let li = document.createElement("li");
+    li.innerHTML = msg;
+    ui.appendChild(li);
+};
 
-    event.preventDefault();
-});
-
-connectionChat.start().then(function () {
-    document.getElementById("sendMessage").disabled = false;
-});
+connection.start();
