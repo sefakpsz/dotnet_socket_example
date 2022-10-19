@@ -15,7 +15,6 @@
             {
                 Console.WriteLine(ex.Message);
             }
-
             return false;
         }
 
@@ -30,7 +29,6 @@
             {
                 Console.WriteLine(ex.Message);
             }
-
             return false;
         }
 
