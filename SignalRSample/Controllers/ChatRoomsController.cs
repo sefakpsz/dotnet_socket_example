@@ -49,7 +49,7 @@ namespace SignalRSample.Controllers
         {
             if (_context.ChatRoom == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.ChatRoom'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.ChatRoom' is null.");
             }
             _context.ChatRoom.Add(chatRoom);
             await _context.SaveChangesAsync();
@@ -78,7 +78,5 @@ namespace SignalRSample.Controllers
 
             return Ok(new { deleted = id, selected = (room == null ? 0 : room.Id) });
         }
-
-
     }
 }

@@ -13,12 +13,10 @@ connection.on("ReceiveUserDisconnected", function (userId, userName) {
 
 connection.on("ReceiveAddRoomMessage", function (maxRoom, roomId, roomName, userId, userName) {
     addMessage(`${userName} has created room ${roomName}`);
-    fillRoomDropDown();
 });
 
 connection.on("ReceiveDeleteRoomMessage", function (deleted, selected, roomName, userName) {
     addMessage(`${userName} has deleted room ${roomName}`);
-    fillRoomDropDown();
 });
 
 function addnewRoom(maxRoom) {
@@ -31,7 +29,6 @@ function addnewRoom(maxRoom) {
         return;
     }
 
-    /*POST*/
     $.ajax({
         url: '/ChatRooms/PostChatRoom',
         dataType: "json",
@@ -42,10 +39,10 @@ function addnewRoom(maxRoom) {
         processData: false,
         cache: false,
         success: function (json) {
-
             /*ADD ROOM COMPLETED SUCCESSFULLY*/
             connection.invoke("SendAddRoomMessage", maxRoom, json.id, json.name);
             createRoomName.value = '';
+            fillRoomDropDown();
         },
         error: function (xhr) {
             alert('error');
@@ -71,7 +68,6 @@ function deleteRoom() {
 
     let roomId = ddlDelRoom.value;
 
-    /*POST*/
     $.ajax({
         url: `/ChatRooms/DeleteChatRoom/${roomId}`,
         dataType: "json",
@@ -81,7 +77,6 @@ function deleteRoom() {
         processData: false,
         cache: false,
         success: function (json) {
-
             connection.invoke("SendDeleteRoomMessage", json.deleted, json.selected, roomName);
             fillRoomDropDown();
         },
@@ -154,7 +149,6 @@ function fillRoomDropDown() {
             var err = textStatus + ", " + error;
             console.log("Request Failed: " + jqxhr.detail);
         });
-
 }
 
 
