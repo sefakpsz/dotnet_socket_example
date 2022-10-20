@@ -19,6 +19,21 @@ connection.on("ReceiveDeleteRoomMessage", function (deleted, selected, roomName,
     addMessage(`${userName} has deleted room ${roomName}`);
 });
 
+connection.on("ReceivePublicMessage", function (roomId, UserId, userName, message, roomName) {
+    addMessage(`[Public Message - ${roomName}] ${userName} says ${message}`);
+});
+
+function sendPublicMessage() {
+    let inputMsg = document.getElementById('txtPublicMessage');
+    let ddlSelRoom = document.getElementById('ddlSelRoom');
+
+    let roomId = ddlSelRoom.ariaValueMax;
+    let roomName = ddlSelRoom.options[ddlSelRoom.selectedIndex].text;
+    var message = inputMsg.value;
+
+    connection.send("SendPublicMessage", Number(roomId), message, roomName);
+}
+
 function addnewRoom(maxRoom) {
 
     let createRoomName = document.getElementById('createRoomName');
@@ -40,7 +55,7 @@ function addnewRoom(maxRoom) {
         cache: false,
         success: function (json) {
             /*ADD ROOM COMPLETED SUCCESSFULLY*/
-            connection.invoke("SendAddRoomMessage", maxRoom, json.id, json.name);
+            connection.send("SendAddRoomMessage", maxRoom, json.id, json.name);
             createRoomName.value = '';
             fillRoomDropDown();
         },
@@ -77,7 +92,7 @@ function deleteRoom() {
         processData: false,
         cache: false,
         success: function (json) {
-            connection.invoke("SendDeleteRoomMessage", json.deleted, json.selected, roomName);
+            connection.send("SendDeleteRoomMessage", json.deleted, json.selected, roomName);
             fillRoomDropDown();
         },
         error: function (xhr) {
