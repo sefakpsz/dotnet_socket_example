@@ -27,7 +27,7 @@ function sendPublicMessage() {
     let inputMsg = document.getElementById('txtPublicMessage');
     let ddlSelRoom = document.getElementById('ddlSelRoom');
 
-    let roomId = ddlSelRoom.ariaValueMax;
+    let roomId = ddlSelRoom.value;
     let roomName = ddlSelRoom.options[ddlSelRoom.selectedIndex].text;
     var message = inputMsg.value;
 
