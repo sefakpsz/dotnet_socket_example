@@ -1,6 +1,6 @@
 ﻿var connection = new signalR.HubConnectionBuilder()
     .withUrl("/hubs/chat")
-    .withAutomaticReconnect([0, 1000, 5000])
+    .withAutomaticReconnect([0, 1000, 5000, null])
     .build();
 
 connection.on("ReceiveUserConnected", function (userId, userName) {
@@ -23,6 +23,10 @@ connection.on("ReceivePublicMessage", function (roomId, UserId, userName, messag
     addMessage(`[Public Message - ${roomName}] ${userName} says ${message}`);
 });
 
+connection.on("ReceivePrivateMessage", function (senderId, senderName, receiverId, message, chatId, receiverName) {
+    addMessage(`[Private Message - ${receiverName}] ${senderName} says ${message}`);
+});
+
 function sendPublicMessage() {
     let inputMsg = document.getElementById('txtPublicMessage');
     let ddlSelRoom = document.getElementById('ddlSelRoom');
@@ -32,6 +36,19 @@ function sendPublicMessage() {
     var message = inputMsg.value;
 
     connection.send("SendPublicMessage", Number(roomId), message, roomName);
+    inputMsg.value = '';
+}
+
+function sendPrivateMessage() {
+    let inputMsg = document.getElementById('txtPrivateMessage');
+    let ddlSelUser = document.getElementById('ddlSelUser');
+
+    let receiverId = ddlSelUser.value;
+    let receiverName = ddlSelUser.options[ddlSelUser.selectedIndex].text;
+    var message = inputMsg.value;
+
+    connection.send("SendPrivateMessage", receiverId, message, receiverName);
+    inputMsg.value = '';
 }
 
 function addnewRoom(maxRoom) {
