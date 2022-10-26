@@ -106,8 +106,6 @@ function addnewRoom(maxRoom) {
         return;
     }
 
-
-
     /*POST*/
     $.ajax({
         url: '/ChatRooms/PostChatRoom',

@@ -1,5 +1,10 @@
 ﻿function receiveaddnewRoomMessage(maxRoom, roomId, roomName, userId) {
 
+    var textArea = document.getElementById('ulmessagesList19');
+    var li = document.createElement('li');
+    li.textContent = `${userName} created ${roomName}`;
+    textArea.appendChild(li);
+
     var newli = document.createElement("li");
 
     /*let ui = li.parentNode;*/
