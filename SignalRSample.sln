@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.32916.344
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRSample", "SignalRSample\SignalRSample.csproj", "{C290EA82-50F7-4BE9-9A8A-A552F01114B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SignalRSample", "SignalRSample\SignalRSample.csproj", "{C290EA82-50F7-4BE9-9A8A-A552F01114B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRSampleReWrite", "SignalRSampleReWrite\SignalRSampleReWrite.csproj", "{F84C1D6F-5F9A-401E-9FB2-6070A1F85D83}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{C290EA82-50F7-4BE9-9A8A-A552F01114B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C290EA82-50F7-4BE9-9A8A-A552F01114B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C290EA82-50F7-4BE9-9A8A-A552F01114B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F84C1D6F-5F9A-401E-9FB2-6070A1F85D83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F84C1D6F-5F9A-401E-9FB2-6070A1F85D83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F84C1D6F-5F9A-401E-9FB2-6070A1F85D83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F84C1D6F-5F9A-401E-9FB2-6070A1F85D83}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
