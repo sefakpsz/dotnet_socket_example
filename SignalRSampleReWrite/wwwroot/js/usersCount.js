@@ -12,8 +12,6 @@ connection.on("UserConnection", value => {
     totalUsersCounter.innerText = value.toString();
 });
 
-console.log("asdfgsdaf");
-
 function uptadeToViews() {
     connection.send("NewWindowLoaded");
 }
