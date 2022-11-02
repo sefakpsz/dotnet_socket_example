@@ -8,7 +8,7 @@ var connectionDeathlyHallows = new signalR.HubConnectionBuilder()
 
 //connect to methods that hub invokes aka receive notifications from hub
 connectionDeathlyHallows.on("updateDeathlyHallowCount", (cloak, stone, wand) => {
-    cloakSpan.innerText = cloak.toString();
+    cloakSpan.textContent = cloak.toString();
     stoneSpan.innerText = stone.toString();
     wandSpan.innerText = wand.toString();
 })

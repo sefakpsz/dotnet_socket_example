@@ -1,21 +1,25 @@
 ﻿var connection = new signalR.HubConnectionBuilder()
-    .withUrl("/hubs/usersCount")
+    .withUrl("/hubs/usersCount", signalR)
     .build();
 
-var totalViewsCounter = document.getElementById("totalViewsCounter");
-var totalUsersCounter = document.getElementById("totalUsersCounter");
-
 connection.on("ReceiveNotification", value => {
-
+    var totalViewsCounter = document.getElementById("totalViewsCounter");
     totalViewsCounter.innerText = value.toString();
 });
 
-connection.on("UserConnected", value => {
+connection.on("UserConnection", value => {
+    var totalUsersCounter = document.getElementById("totalUsersCounter");
     totalUsersCounter.innerText = value.toString();
 });
 
-connection.on("UserDisconnected", value => {
-    totalUsersCounter.innerText = value.toString();
-});
+console.log("asdfgsdaf");
 
-connection.start();
+function uptadeToViews() {
+    connection.send("NewWindowLoaded");
+}
+
+function fulfilled() {
+    uptadeToViews();
+}
+
+connection.start().then(fulfilled);
