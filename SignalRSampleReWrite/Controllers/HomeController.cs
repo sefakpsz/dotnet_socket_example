@@ -32,8 +32,20 @@ namespace SignalRSampleReWrite.Controllers
 
         public async Task<IActionResult> DeathlyHallows(string hallow)
         {
-            await _deathlyHallowHub.Clients.All.SendAsync("Vote", hallow);
-            return Ok();
+            switch(hallow.ToLower())
+            {
+                case "stone":
+                    DeathlyHallowHub.Stone++;
+                    break;
+                case "wand":
+                    DeathlyHallowHub.Wand++;
+                    break;
+                case "cloak":
+                    DeathlyHallowHub.Cloak++;
+                    break;
+            }
+            await _deathlyHallowHub.Clients.All.SendAsync("UpdateCounter", hallow);
+            return Accepted();
         }
 
         public IActionResult Privacy()
