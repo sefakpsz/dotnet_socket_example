@@ -1,28 +1,18 @@
-﻿var connection = new signalR.HubConnectionBuilder()
-    .withUrl("/hubs/deathlyHallow", signalR)
+﻿var cloakSpan = document.getElementById("cloakCounter");
+var stoneSpan = document.getElementById("stoneCounter");
+var wandSpan = document.getElementById("wandCounter");
+
+var connection = new signalR.HubConnectionBuilder()
+    .withUrl("/hubs/deathlyHallow")
     .build();
 
-var cloak = document.getElementById("cloakCounter");
-var stone = document.getElementById("stoneCounter");
-var wand = document.getElementById("wandCounter");
 
-//connection.on("Vote", value => {
-//    connection.send("IncreaseToCounter", value);
-//});
-
-connection.on("UpdateCounters", (Cloak, Wand, Stone) => {
-    connection.invoke("CloakCounter").then(value => {
-        cloak.innerText = value.toString();
-    });
-
-    connection.invoke("WandCounter").then(value => {
-        stone.innerText = value.toString();
-    });
-
-    connection.invoke("StoneCounter").then(value => {
-        wand.innerText = value.toString();
-    });
+connection.on("UpdateCounters", (cloak, stone, wand) => {
+    stoneSpan.textContent = stone.toString();
+    cloakSpan.textContent = cloak.toString();
+    wandSpan.textContent = wand.toString();
 });
+
 
 
 function fulfilled() {
@@ -31,11 +21,11 @@ function fulfilled() {
     });
 
     connection.invoke("WandCounter").then(value => {
-        stone.innerText = value.toString();
+        wand.innerText = value.toString();
     });
 
     connection.invoke("StoneCounter").then(value => {
-        wand.innerText = value.toString();
+        stone.innerText = value.toString();
     });
 }
 

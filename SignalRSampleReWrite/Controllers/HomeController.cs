@@ -10,10 +10,6 @@ namespace SignalRSampleReWrite.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IHubContext<DeathlyHallowHub> _deathlyHallowHub;
-        public static int Cloak { get; set; }
-        public static int Wand { get; set; }
-        public static int Stone { get; set; }
-
         public HomeController(ILogger<HomeController> logger, IHubContext<DeathlyHallowHub> deathlyHallowHub)
         {
             _logger = logger;
@@ -32,7 +28,7 @@ namespace SignalRSampleReWrite.Controllers
 
         public async Task<IActionResult> DeathlyHallows(string hallow)
         {
-            switch(hallow.ToLower())
+            switch (hallow.ToLower())
             {
                 case "stone":
                     DeathlyHallowHub.Stone++;
@@ -44,7 +40,7 @@ namespace SignalRSampleReWrite.Controllers
                     DeathlyHallowHub.Cloak++;
                     break;
             }
-            await _deathlyHallowHub.Clients.All.SendAsync("UpdateCounter", hallow);
+            await _deathlyHallowHub.Clients.All.SendAsync("UpdateCounters", DeathlyHallowHub.Cloak, DeathlyHallowHub.Stone, DeathlyHallowHub.Wand);
             return Accepted();
         }
 
