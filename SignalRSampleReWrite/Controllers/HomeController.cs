@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
+using SignalRSampleReWrite.Data;
 using SignalRSampleReWrite.Hubs;
 using SignalRSampleReWrite.Models;
 using System.Diagnostics;
@@ -10,10 +12,14 @@ namespace SignalRSampleReWrite.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IHubContext<DeathlyHallowHub> _deathlyHallowHub;
-        public HomeController(ILogger<HomeController> logger, IHubContext<DeathlyHallowHub> deathlyHallowHub)
+        private readonly IHubContext<OrderHub> _orderHub;
+        private readonly ApplicationDbContext _context;
+        public HomeController(ILogger<HomeController> logger, IHubContext<DeathlyHallowHub> deathlyHallowHub, ApplicationDbContext contex, IHubContext<OrderHub> orderHub)
         {
             _logger = logger;
             _deathlyHallowHub = deathlyHallowHub;
+            _context = contex;
+            _orderHub = orderHub;
         }
 
         public IActionResult Index()
@@ -44,15 +50,51 @@ namespace SignalRSampleReWrite.Controllers
             return Accepted();
         }
 
-        public IActionResult Privacy()
+        [ActionName("Order")]
+        public async Task<IActionResult> Order()
+        {
+            string[] name = { "Bhrugen", "Ben", "Jess", "Laura", "Ron" };
+            string[] itemName = { "Food1", "Food2", "Food3", "Food4", "Food5" };
+
+            Random rand = new();
+            // Generate a random index less than the size of the array.  
+            int index = rand.Next(name.Length);
+
+            Order order = new()
+            {
+                Name = name[index],
+                ItemName = itemName[index],
+                Count = index == 0 ? 1 : index
+            };
+
+            return View(order);
+        }
+
+        [ActionName("Order")]
+        [HttpPost]
+        public async Task<IActionResult> OrderPost(Order order)
+        {
+            _context.Orders.Add(order);
+            _context.SaveChanges();
+            await _orderHub.Clients.All.SendAsync("UpdateOrderList");
+            return RedirectToAction(nameof(Order));
+        }
+        [ActionName("OrderList")]
+        public async Task<IActionResult> OrderList()
         {
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public async Task<IActionResult> HarryPotterHouse()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult GetAllOrder()
+        {
+            var productList = _context.Orders.ToList();
+            return Json(new { data = productList });
         }
     }
 }
