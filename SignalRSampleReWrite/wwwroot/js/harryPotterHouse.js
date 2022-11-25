@@ -21,54 +21,102 @@ let trigger_ravenclaw = document.getElementById("trigger_ravenclaw");
 
 
 btn_gryffindor.addEventListener("click", function (event) {
-    connection.send("Subscribe", "gryffindor", false);
+    connection.send("Subscribe", "Gryffindor", false);
+    btn_gryffindor.style.display = "none";
+    btn_un_gryffindor.style.display = "";
     event.preventDefault();
 })
 
 btn_slytherin.addEventListener("click", function (event) {
-    connection.send("Subscribe", "slytherin", false);
+    connection.send("Subscribe", "Slytherin", false);
+    btn_slytherin.style.display = "none";
+    btn_un_slytherin.style.display = "";
     event.preventDefault();
 })
 
 btn_hufflepuff.addEventListener("click", function (event) {
-    connection.send("Subscribe", "hufflepuff", false);
+    connection.send("Subscribe", "Hufflepuff", false);
+    btn_hufflepuff.style.display = "none";
+    btn_un_hufflepuff.style.display = "";
     event.preventDefault();
 })
 
 btn_ravenclaw.addEventListener("click", function (event) {
-    connection.send("Subscribe", "ravenclaw", false);
+    connection.send("Subscribe", "Ravenclaw", false);
+    btn_ravenclaw.style.display = "none";
+    btn_un_ravenclaw.style.display = "";
     event.preventDefault();
 })
 
 
 
 btn_un_gryffindor.addEventListener("click", function (event) {
-    connection.send("Subscribe", "gryffindor",true);
+    connection.send("Subscribe", "Gryffindor", true);
+    btn_gryffindor.style.display = "";
+    btn_un_gryffindor.style.display = "none";
     event.preventDefault();
 })
 
 btn_un_slytherin.addEventListener("click", function (event) {
-    connection.send("Subscribe", "slytherin", true);
+    connection.send("Subscribe", "Slytherin", true);
+    btn_slytherin.style.display = "";
+    btn_un_slytherin.style.display = "none";
     event.preventDefault();
 })
 
 btn_un_hufflepuff.addEventListener("click", function (event) {
-    connection.send("Subscribe", "hufflepuff", true);
+    connection.send("Subscribe", "Hufflepuff", true);
+    btn_hufflepuff.style.display = "";
+    btn_un_hufflepuff.style.display = "none";
     event.preventDefault();
 })
 
 btn_un_ravenclaw.addEventListener("click", function (event) {
-    connection.send("Subscribe", "ravenclaw", true);
+    connection.send("Subscribe", "Ravenclaw", true);
+    btn_ravenclaw.style.display = "";
+    btn_un_ravenclaw.style.display = "none";
     event.preventDefault();
 })
 
-connection.on("Subscribed", function () {
-    toastr.success()
+
+trigger_gryffindor.addEventListener("click", function (event) {
+    connection.send("Triggering", "Gryffindor");
+})
+
+trigger_slytherin.addEventListener("click", function (event) {
+    connection.send("Triggering", "Slytherin");
+})
+
+trigger_hufflepuff.addEventListener("click", function (event) {
+    connection.send("Triggering", "Hufflepuff");
+})
+
+trigger_ravenclaw.addEventListener("click", function (event) {
+    connection.send("Triggering", "Ravenclaw");
+})
+
+connection.on("Subbed", (house, unsubscribing, only) => {
+    if (unsubscribing) {
+        if (only == 'only') {
+            toastr.success(`You have Unsubscribed Successfully. ${house}`);
+        }
+        else {
+            toastr.warning(`Member has unsubscribed from ${house}`);
+        }
+    }
+    else {
+        if (only == 'only') {
+            toastr.success(`You have Subscribed Successfully. ${house}`);
+        }
+        else {
+            toastr.success(`Member has subscribed to ${house}`);
+        }
+    }
 });
 
-connection.on("UnSubscribed", function () {
-
-});
+connection.on("Trigger", (house) => {
+    toastr.success(`A new notification for ${house} has been launched.`);
+})
 
 function fulfilled() {
 

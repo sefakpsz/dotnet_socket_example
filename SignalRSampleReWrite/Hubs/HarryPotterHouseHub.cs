@@ -4,28 +4,37 @@ namespace SignalRSampleReWrite.Hubs
 {
     public class HarryPotterHouseHub : Hub
     {
-        private readonly object user;
-        private readonly object message;
-        public async Task Subscribing(string house, bool unsubscribing)
+        public async Task Subscribe(string house, bool unsubscribing)
         {
-            
-            await Clients.Caller.SendAsync("Subbed", house);
-            await Clients.Others.SendAsync("Subbed", house);
+            if (unsubscribing)
+            {
+                await Groups.RemoveFromGroupAsync(Context.ConnectionId, house);
+            }
+            else
+            {
+                await Groups.AddToGroupAsync(Context.ConnectionId, house);
+            }
+            await Clients.Caller.SendAsync("Subbed", house, unsubscribing, "only");
+            await Clients.Others.SendAsync("Subbed", house, unsubscribing, "everyone");
+        }
 
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
-            await Clients.Caller.Send Async("ReceiveMessage", user, message);
-            await Clients.Others.SendAsync("ReceiveMessage", user, message);
-            await Clients.Client("Connection Id - A").SendAsync("ReceiveMessage", user, message);
-            await Clients.Clients("Connection Id - A", "Connection Id - B").SendAsync("ReceiveMessage", user, message);
-            await Clients.AllExcept("Connection Id - A", "Connection Id - C").SendAsync("ReceiveMessage", user, message);
-            await Clients.User("ben@gmail.com").SendAsync("ReceiveMessage", user, message);
-            await Clients.Users("ben@gmail.com", "jess@gmail.com").SendAsync("ReceiveMessage", user, message);
-            await Groups.AddToGroupAsync(Context.ConnectionId, "GroupName");
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, "GroupName");
-            await Clients.Group("admin").SendAsync("ReceiveMessage", user, message);
-            await Clients.OthersInGroup("admin").SendAsync("ReceiveMessage", user, message);
-            await Clients.Groups("admin", "user").SendAsync("ReceiveMessage", user, message);
-            await Clients.GroupExcept("admin", "sam@gmail.com").SendAsync("ReceiveMessage", user, message);
+        public async Task Triggering(string house)
+        {
+            await Clients.Group(house).SendAsync("Trigger");
         }
     }
 }
+//await Clients.All.SendAsync("ReceiveMessage", user, message);
+//await Clients.Caller.SendAsync("ReceiveMessage", user, message);
+//await Clients.Others.SendAsync("ReceiveMessage", user, message);
+//await Clients.Client("Connection Id - A").SendAsync("ReceiveMessage", user, message);
+//await Clients.Clients("Connection Id - A", "Connection Id - B").SendAsync("ReceiveMessage", user, message);
+//await Clients.AllExcept("Connection Id - A", "Connection Id - C").SendAsync("ReceiveMessage", user, message);
+//await Clients.User("ben@gmail.com").SendAsync("ReceiveMessage", user, message);
+//await Clients.Users("ben@gmail.com", "jess@gmail.com").SendAsync("ReceiveMessage", user, message);
+//await Groups.AddToGroupAsync(Context.ConnectionId, "GroupName");
+//await Groups.RemoveFromGroupAsync(Context.ConnectionId, "GroupName");
+//await Clients.Group("admin").SendAsync("ReceiveMessage", user, message);
+//await Clients.OthersInGroup("admin").SendAsync("ReceiveMessage", user, message);
+//await Clients.Groups("admin", "user").SendAsync("ReceiveMessage", user, message);
+//await Clients.GroupExcept("admin", "sam@gmail.com").SendAsync("ReceiveMessage", user, message);
