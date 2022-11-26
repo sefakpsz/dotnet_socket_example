@@ -4,18 +4,36 @@ namespace SignalRSampleReWrite.Hubs
 {
     public class HarryPotterHouseHub : Hub
     {
+        public static List<string> HouseList { get; set; } = new List<string>();
         public async Task Subscribe(string house, bool unsubscribing)
         {
             if (unsubscribing)
             {
                 await Groups.RemoveFromGroupAsync(Context.ConnectionId, house);
+                foreach (var item in HouseList)
+                {
+                    if (item.Equals(house))
+                        HouseList.Remove(house);
+                }
             }
             else
             {
                 await Groups.AddToGroupAsync(Context.ConnectionId, house);
+                foreach (var item in HouseList)
+                {
+                    if (!item.Equals(house))
+                        HouseList.Add(house);
+                }
             }
-            await Clients.Caller.SendAsync("Subbed", house, unsubscribing, "only");
-            await Clients.Others.SendAsync("Subbed", house, unsubscribing, "everyone");
+
+            var houseList = "";
+            foreach (var item in HouseList)
+            {
+                houseList += item + " ";
+            }
+
+            await Clients.Caller.SendAsync("Subbed", house, unsubscribing, "only", houseList);
+            await Clients.Others.SendAsync("Subbed", house, unsubscribing, "everyone", houseList);
         }
 
         public async Task Triggering(string house)
