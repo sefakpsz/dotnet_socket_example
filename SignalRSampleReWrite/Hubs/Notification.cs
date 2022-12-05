@@ -4,15 +4,18 @@ namespace SignalRSampleReWrite.Hubs
 {
     public class Notification : Hub
     {
-        private static int _counter = 0;
-        private static string messages = "";
+        public static int _counter = 0;
+        public static List<string> _messages = new();
         public async Task MessageReceived(string input)
         {
             _counter++;
-            messages += "Notification - " + input + " ";
-            await Clients.All.SendAsync("MessageSent", messages, _counter);
+            _messages.Add("Notification - " + input + " ");
+            await MessagesAndCounter();
         }
 
-        //WHEN PAGE OPEN MESSAGES AND COUNTER WILL CONTINUE FROM WHERE IT WAS
+        public async Task MessagesAndCounter()
+        {
+            await Clients.All.SendAsync("LoadMessages", _counter, _messages);
+        }
     }
 }

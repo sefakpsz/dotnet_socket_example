@@ -10,18 +10,21 @@ var bell = document.getElementById("notificationBell");
 
 sendButton.addEventListener("click", function (event) {
     event.preventDefault();
-    connection.send("MessageReceived", input.value).then(() => { input.value = "";});
+    connection.send("MessageReceived", input.value).then(() => { input.value = ""; });
 });
 
-connection.on("MessageSent", (input, counter) => {
-    var li = document.createElement("li");
-    li.innerText = input;
-    messageList.appendChild(li);
-    notificationCounter.innerText = counter;
+connection.on("LoadMessages", (counter, messages) => {
+    messageList.innerHTML = "";
+    for (var i = 0; i < messages.length; i++) {
+        var li = document.createElement("li");
+        li.innerText = messages[i];
+        messageList.appendChild(li);
+        notificationCounter.innerText = counter;
+    }
 });
 
 function fulfilled() {
-    notificationCounter.value = 0;
+    connection.send("MessagesAndCounter");
 }
 
 function reject() {
