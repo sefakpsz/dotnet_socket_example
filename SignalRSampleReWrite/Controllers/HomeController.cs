@@ -86,8 +86,12 @@ namespace SignalRSampleReWrite.Controllers
             return View();
         }
 
-        [Authorize]
         public async Task<IActionResult> HarryPotterHouse()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> Notification()
         {
             return View();
         }

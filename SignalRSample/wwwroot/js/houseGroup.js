@@ -82,11 +82,9 @@ trigger_ravenclaw.addEventListener("click", function (event) {
     event.preventDefault();
 });
 
-
 connectionHouse.on("triggerHouseNotification", (houseName) => {
     toastr.success(`A new notification for ${houseName} has been launched.`);
 });
-
 
 connectionHouse.on("newMemberAddedToHouse", (houseName) => {
     toastr.success('Member has subscribed to ' + houseName);

@@ -4,36 +4,37 @@ namespace SignalRSampleReWrite.Hubs
 {
     public class HarryPotterHouseHub : Hub
     {
-        public static List<string> HouseList { get; set; } = new List<string>();
+        private static readonly List<string> _houseList = new();
         public async Task Subscribe(string house, bool unsubscribing)
         {
-            if (unsubscribing)
+            if (!unsubscribing)
             {
-                await Groups.RemoveFromGroupAsync(Context.ConnectionId, house);
-                foreach (var item in HouseList)
+                if (!_houseList.Contains(Context.ConnectionId + ":" + house))
                 {
-                    if (item.Equals(house))
-                        HouseList.Remove(house);
+                    _houseList.Add(Context.ConnectionId + ":" + house);
+                    await Groups.AddToGroupAsync(Context.ConnectionId, house);
                 }
             }
             else
             {
-                await Groups.AddToGroupAsync(Context.ConnectionId, house);
-                foreach (var item in HouseList)
+                if (_houseList.Contains(Context.ConnectionId + ":" + house))
                 {
-                    if (!item.Equals(house))
-                        HouseList.Add(house);
+                    _houseList.Remove(Context.ConnectionId + ":" + house);
+                    await Groups.RemoveFromGroupAsync(Context.ConnectionId, house);
                 }
             }
 
             var houseList = "";
-            foreach (var item in HouseList)
+            foreach (var item in _houseList)
             {
-                houseList += item + " ";
+                if (item.Contains(Context.ConnectionId))
+                {
+                    houseList += item.Split(":")[1] + " ";
+                }
             }
 
             await Clients.Caller.SendAsync("Subbed", house, unsubscribing, "only", houseList);
-            await Clients.Others.SendAsync("Subbed", house, unsubscribing, "everyone", houseList);
+            await Clients.Others.SendAsync("Subbed", house, unsubscribing, "everyone");
         }
 
         public async Task Triggering(string house)

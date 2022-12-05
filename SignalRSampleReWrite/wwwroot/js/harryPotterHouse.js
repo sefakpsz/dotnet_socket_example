@@ -96,9 +96,9 @@ trigger_ravenclaw.addEventListener("click", function (event) {
 })
 
 connection.on("Subbed", (house, unsubscribing, only, houseList) => {
-    lbl_houseJoined.innerText = houseList;
     if (unsubscribing) {
         if (only == 'only') {
+            lbl_houseJoined.innerText = houseList;
             toastr.success(`You have Unsubscribed Successfully. ${house}`);
         }
         else {
@@ -107,6 +107,7 @@ connection.on("Subbed", (house, unsubscribing, only, houseList) => {
     }
     else {
         if (only == 'only') {
+            lbl_houseJoined.innerText = houseList;
             toastr.success(`You have Subscribed Successfully. ${house}`);
         }
         else {
