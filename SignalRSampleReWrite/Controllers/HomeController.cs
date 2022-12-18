@@ -102,5 +102,10 @@ namespace SignalRSampleReWrite.Controllers
             var productList = _context.Orders.ToList();
             return Json(new { data = productList });
         }
+
+        public async Task<IActionResult> BasicChat()
+        {
+            return View();
+        }
     }
 }
