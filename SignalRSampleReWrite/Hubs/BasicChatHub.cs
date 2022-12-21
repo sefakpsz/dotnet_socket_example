@@ -4,23 +4,20 @@ namespace SignalRSampleReWrite.Hubs
 {
     public class BasicChatHub : Hub
     {
-        public static Dictionary<string, string> Messages = new Dictionary<string, string>();
+        public static string messages = "";
         public async Task MessageHandler(string message, string receiver, string sender)
         {
-            Messages.Add(sender, message);
-            string messages = "";
-            foreach (var item in Messages)
-            {
-                messages += item.Key + " - " + item.Value;
-            }
+            messages = sender + " - " + message;
+
             if (string.IsNullOrEmpty(receiver))
-            {
-                await Clients.All.SendAsync("MessageReceived", messages, Messages.Count);
-            }
+                await Clients.All.SendAsync("MessageReceived", messages);
             else
-            {
-                await Clients.User(receiver).SendAsync("MessageReceived", messages, Messages.Count);
-            }
+                await Clients.User(receiver).SendAsync("MessageReceived", messages);
+        }
+
+        public async Task<string> ReadMessages()
+        {
+            return messages;
         }
     }
 }

@@ -9,25 +9,28 @@ var chatMessage = document.getElementById("chatMessage");
 var messagesList = document.getElementById("messagesList");
 
 document.getElementById("sendMessage").addEventListener("click", function (event) {
-    //if (receiverEmail.innerText.trim().length === 0) {}
-    connection.send("MessageHandler", chatMessage.innerText, receiverEmail.innerText, senderMail.innerText);
+    connection.send("MessageHandler", chatMessage.value, receiverEmail.value, senderMail.value);
     event.preventDefault();
 })
 
-connection.on("MessageReceived", (messages, messagesLength) => {
-    for (var i = 0; i < messagesLength; i++) {
-        var li = document.createElement("li");
-        li.innerText = messages[i];
-        messagesList.appendChild(li);
-    }
+connection.on("MessageReceived", (messages) => {
+    var li = document.createElement("li");
+    li.innerText = messages;
+    messagesList.appendChild(li);
 })
 
 function fulfilled() {
-
+    //connection.invoke("ReadMessages").then((value) => {
+    //    for (var i = 0; i < value.length; i++) {
+    //        var li = document.createElement("li");
+    //        li.innerText = messages;
+    //        messagesList.appendChild(li);
+    //    }
+    //});
 }
 
 function reject() {
 
 }
 
-connection.start().then(fulfilled, reject);
+connection.start().then(fulfilled, reject); 
