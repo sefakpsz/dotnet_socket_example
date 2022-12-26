@@ -20,13 +20,13 @@ connection.on("MessageReceived", (messages) => {
 })
 
 function fulfilled() {
-    //connection.invoke("ReadMessages").then((value) => {
-    //    for (var i = 0; i < value.length; i++) {
-    //        var li = document.createElement("li");
-    //        li.innerText = messages;
-    //        messagesList.appendChild(li);
-    //    }
-    //});
+    connection.invoke("GetAllMessages").then((value) => {
+        for (var i = 0; i < value.length; i++) {
+            var li = document.createElement("li");
+            li.innerText = value[i].toString();
+            messagesList.appendChild(li);
+        }
+    });
 }
 
 function reject() {
